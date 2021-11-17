@@ -1,15 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import isEmpty from "lodash/isEmpty";
-import nc from "next-connect";
-import prisma, { Prisma } from "@db";
-import { getSession } from "@lib/auth/session";
+import { NextApiRequest, NextApiResponse } from 'next';
+import isEmpty from 'lodash/isEmpty';
+import nc from 'next-connect';
+import prisma, { Prisma } from '@db';
+import { getSession } from '@lib/auth/session';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
 
   if (!session) {
     return res.status(401).json({
-      message: "Unauthorized",
+      message: 'Unauthorized',
     });
   }
 
@@ -41,10 +41,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const users = await prisma.user.findMany(findManyArgs);
-
     return res.status(200).json(users);
   } catch (error) {
-    console.error("[api] user", error);
+    console.error('[api] user', error);
     return res.status(500).json({ statusCode: 500, message: error.message });
   }
 };

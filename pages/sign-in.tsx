@@ -1,35 +1,39 @@
-import { filter } from "lodash";
-import { GetServerSidePropsContext } from "next";
+import { filter } from 'lodash';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import {
-  getSession,
   getCsrfToken,
-  signIn,
   getProviders,
-} from "next-auth/react";
-import Head from "next/head";
-import React from "react";
-import { useForm } from "react-hook-form";
+  getSession,
+  signIn,
+} from 'next-auth/react';
+import Head from 'next/head';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
 const MINIMUM_ACTIVITY_TIMEOUT = 850;
+
 type LoginFormValues = {
   csrfToken: string;
   email: string;
   password: string;
 };
 
-export default function Page({ csrfToken, providers }) {
+export default function Page(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
+  const { csrfToken, providers } = props;
   const [isSubmitting, setSubmitting] = React.useState(false);
-
   const { register, handleSubmit } = useForm();
 
   const handleProviderSignIn = (provider) => {
     signIn(provider.id);
   };
+
   const onSubmit = async (data: LoginFormValues) => {
     setSubmitting(true);
     try {
-      signIn("app-login", {
-        callbackUrl: "/",
+      signIn('app-login', {
+        callbackUrl: '/',
         email: data.email,
         password: data.password,
       });
@@ -39,7 +43,6 @@ export default function Page({ csrfToken, providers }) {
       }, MINIMUM_ACTIVITY_TIMEOUT);
     } catch (error) {
       console.error(error);
-      //   setError(error)
       setSubmitting(false);
     }
   };
@@ -74,7 +77,7 @@ export default function Page({ csrfToken, providers }) {
             >
               <input
                 name="csrfToken"
-                {...register("csrfToken")}
+                {...register('csrfToken')}
                 type="hidden"
                 defaultValue={csrfToken}
                 hidden
@@ -93,7 +96,7 @@ export default function Page({ csrfToken, providers }) {
                     type="email"
                     autoComplete="email"
                     required
-                    {...register("email")}
+                    {...register('email')}
                     className="appearance-none w-full font-medium py-3 border-b border-t-0 border-l-0 border-r-0 border-dashed outline-none text-xl text-center leading-6 bg-transparent placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 transition duration-150 ease-in-out"
                   />
                 </div>
@@ -116,7 +119,7 @@ export default function Page({ csrfToken, providers }) {
                     autoComplete="current-password"
                     minLength={12}
                     required
-                    {...register("password")}
+                    {...register('password')}
                     className="appearance-none w-full font-medium py-3 border-b border-t-0 border-l-0 border-r-0 border-dashed outline-none text-xl text-center leading-6 bg-transparent placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 transition duration-150 ease-in-out"
                   />
                 </div>
@@ -148,7 +151,7 @@ export default function Page({ csrfToken, providers }) {
                 {providers.map((provider) => {
                   return (
                     <button
-                      key={provider}
+                      key={provider.id}
                       type="button"
                       onClick={() => handleProviderSignIn(provider)}
                       className="button button__secondary inline-flex space-x-2"
@@ -174,12 +177,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
 
   if (session) {
-    return { redirect: { permanent: false, destination: "/" } };
+    return { redirect: { permanent: false, destination: '/' } };
   }
 
   const csrfToken = await getCsrfToken({ req: context.req });
   const providers = filter(await getProviders(), (provider) => {
-    return provider.type !== "credentials";
+    return provider.type !== 'credentials';
   });
 
   return {

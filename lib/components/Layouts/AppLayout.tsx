@@ -1,11 +1,11 @@
-import classNames from "classnames";
-import { useSession, signOut, signIn } from "next-auth/react";
-import Link from "next/link";
-import { Menu, Transition } from "@headlessui/react";
-import { UserIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { Fragment } from "react";
-import { useRouter } from "next/router";
+import classNames from 'classnames';
+import { useSession, signOut, signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { Menu, Transition } from '@headlessui/react';
+import { UserIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import { Fragment } from 'react';
+import { useRouter } from 'next/router';
 
 const AppLayout = (props) => {
   const { status, data: session } = useSession({
@@ -17,28 +17,28 @@ const AppLayout = (props) => {
   const currentPath = router.pathname;
   const NAV_ITEMS = [
     {
-      title: "Home",
-      href: "/",
+      title: 'Home',
+      href: '/',
     },
     {
-      title: "Client",
-      href: "/client",
+      title: 'Client',
+      href: '/client',
     },
     {
-      title: "Server",
-      href: "/server",
+      title: 'Server',
+      href: '/server',
     },
     {
-      title: "With Session",
-      href: "/with-session",
+      title: 'With Session',
+      href: '/with-session',
     },
     {
-      title: "Client Redirect",
-      href: "/client-redirect",
+      title: 'Client Redirect',
+      href: '/client-redirect',
     },
     {
-      title: "Server Redirect",
-      href: "/server-redirect",
+      title: 'Server Redirect',
+      href: '/server-redirect',
     },
   ];
 
@@ -93,14 +93,14 @@ const AppLayout = (props) => {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                        {status == "authenticated" ? (
+                        {status == 'authenticated' ? (
                           <Menu.Item>
                             {({ active }) => (
                               <a
                                 onClick={() => signOut()}
                                 className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700'
                                 )}
                               >
                                 Sign Out
@@ -113,8 +113,8 @@ const AppLayout = (props) => {
                               <a
                                 onClick={() => signIn()}
                                 className={classNames(
-                                  active ? "bg-gray-100" : "",
-                                  "block px-4 py-2 text-sm text-gray-700"
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700'
                                 )}
                               >
                                 Sign In
@@ -136,12 +136,12 @@ const AppLayout = (props) => {
                       <a
                         className={classNames(
                           item.href === currentPath
-                            ? "border-b border-indigo-600 text-black"
-                            : " hover:border-b  hover:border-gray-200 text-gray-600 ",
-                          "group flex items-center px-2 py-2 text-sm leading-6 font-medium"
+                            ? 'border-b border-indigo-600 text-black'
+                            : ' hover:border-b  hover:border-gray-200 text-gray-600 ',
+                          'group flex items-center px-2 py-2 text-sm leading-6 font-medium'
                         )}
                         aria-current={
-                          item.href === currentPath ? "page" : undefined
+                          item.href === currentPath ? 'page' : undefined
                         }
                       >
                         {item.title}

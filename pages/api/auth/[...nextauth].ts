@@ -1,11 +1,11 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GitHubProvider from "next-auth/providers/github";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GitHubProvider from 'next-auth/providers/github';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
-import { verifyPassword, hashPassword } from "@lib/auth/passwords";
-import { Session } from "@lib/auth/session";
-import prisma from "@db/index";
+import { verifyPassword, hashPassword } from '@lib/auth/passwords';
+import { Session } from '@lib/auth/session';
+import prisma from '@db/index';
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -14,7 +14,7 @@ export default NextAuth({
     jwt: true,
   },
   pages: {
-    signIn: "/sign-in",
+    signIn: '/sign-in',
     // signOut: "/auth/logout",
     // error: "/auth/error", // Error code passed in query string as ?error=
   },
@@ -24,18 +24,18 @@ export default NextAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
     CredentialsProvider({
-      id: "app-login",
-      name: "App Login",
+      id: 'app-login',
+      name: 'App Login',
       credentials: {
         email: {
-          label: "Email Address",
-          type: "email",
-          placeholder: "john.doe@example.com",
+          label: 'Email Address',
+          type: 'email',
+          placeholder: 'john.doe@example.com',
         },
         password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Your super secure password",
+          label: 'Password',
+          type: 'password',
+          placeholder: 'Your super secure password',
         },
       },
       async authorize(credentials) {
@@ -56,13 +56,13 @@ export default NextAuth({
           if (!maybeUser) {
             const { email, password } = credentials;
 
-            if (!email || !email.includes("@")) {
-              throw new Error("Invalid email");
+            if (!email || !email.includes('@')) {
+              throw new Error('Invalid email');
             }
 
             if (!password || password.trim().length < 12) {
               throw new Error(
-                "Invalid input - password should be at least 12 characters long."
+                'Invalid input - password should be at least 12 characters long.'
               );
             }
 
@@ -79,7 +79,7 @@ export default NextAuth({
             );
 
             if (!isValid) {
-              throw new Error("Incorrect password");
+              throw new Error('Incorrect password');
             }
           }
 
@@ -96,18 +96,18 @@ export default NextAuth({
       },
     }),
     CredentialsProvider({
-      id: "admin-login",
-      name: "Administrator Login",
+      id: 'admin-login',
+      name: 'Administrator Login',
       credentials: {
         email: {
-          label: "Email Address",
-          type: "email",
-          placeholder: "john.doe@example.com",
+          label: 'Email Address',
+          type: 'email',
+          placeholder: 'john.doe@example.com',
         },
         password: {
-          label: "Password",
-          type: "password",
-          placeholder: "Your super secure password",
+          label: 'Password',
+          type: 'password',
+          placeholder: 'Your super secure password',
         },
       },
       async authorize(credentials) {
@@ -125,21 +125,21 @@ export default NextAuth({
         });
 
         if (!maybeUser) {
-          throw new Error("Unauthorized.");
+          throw new Error('Unauthorized.');
         }
 
-        if (maybeUser?.role !== "admin") {
-          throw new Error("Unauthorized.");
+        if (maybeUser?.role !== 'admin') {
+          throw new Error('Unauthorized.');
         }
 
         const { email, password } = credentials;
-        if (!email || !email.includes("@")) {
-          throw new Error("Invalid email");
+        if (!email || !email.includes('@')) {
+          throw new Error('Invalid email');
         }
 
         if (!password || password.trim().length < 12) {
           throw new Error(
-            "Invalid input - password should be at least 12 characters long."
+            'Invalid input - password should be at least 12 characters long.'
           );
         }
         const isValid = await verifyPassword(
@@ -148,7 +148,7 @@ export default NextAuth({
         );
 
         if (!isValid) {
-          throw new Error("Incorrect password");
+          throw new Error('Incorrect password');
         }
 
         return {
